@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cars")
-@CrossOrigin(origins = "https://moto-freak.herokuapp.com/")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CarCompanyController {
 
     private final CarsService carsService;

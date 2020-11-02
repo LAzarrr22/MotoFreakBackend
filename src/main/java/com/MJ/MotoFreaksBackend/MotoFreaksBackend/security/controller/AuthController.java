@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @Slf4j
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "https://moto-freak.herokuapp.com/")
 public class AuthController {
 
     private final AuthUserService customUserAuthService;

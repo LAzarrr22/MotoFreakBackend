@@ -34,7 +34,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @Service
 @Slf4j
-public class AuthUserService implements UserDetailsService {
+public class AuthUserService  {
     @Autowired
     private UserRepository userRepository;
 
@@ -103,23 +103,6 @@ public class AuthUserService implements UserDetailsService {
         newUser.setContact(new Contact(user.getEmail()));
         newUser.setAddress(new Address());
         userRepository.save(newUser);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userService.getUserByUserName(email);
-        List<GrantedAuthority> authorities = getUserAuthority(user.getUserRoles());
-        return buildUserForAuthentication(user, authorities);
-    }
-
-    private List<GrantedAuthority> getUserAuthority(Set<UserRoles> userRoles) {
-        Set<GrantedAuthority> roles = new HashSet<>();
-        userRoles.forEach((role) -> roles.add(new SimpleGrantedAuthority(role.getRole().toString())));
-        return new ArrayList<>(roles);
-    }
-
-    private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), authorities);
     }
 
     public Object addRole(String id, Role role) {

@@ -11,7 +11,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/challenge")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ChallengeController {
 
     private final ChallengeService challengeService;

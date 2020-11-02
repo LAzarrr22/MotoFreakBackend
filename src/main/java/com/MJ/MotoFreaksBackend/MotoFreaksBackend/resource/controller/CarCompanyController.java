@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cars")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CarCompanyController {
 
     private final CarsService carsService;

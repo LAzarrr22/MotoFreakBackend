@@ -15,7 +15,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/posts")
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostsController {
 
     private final PostsService postsService;

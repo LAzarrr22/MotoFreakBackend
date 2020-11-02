@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/user")
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://moto-freak.herokuapp.com/")
 public class UserController {
 
     private final UserService userService;

@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/challenge")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://moto-freak.herokuapp.com/")
 public class ChallengeController {
 
     private final ChallengeService challengeService;

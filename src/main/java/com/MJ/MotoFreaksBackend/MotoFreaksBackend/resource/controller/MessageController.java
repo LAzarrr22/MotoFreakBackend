@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/message")
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://moto-freak.herokuapp.com/")
 public class MessageController {
 
     private final MessageService messageService;

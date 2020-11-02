@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/posts")
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://moto-freak.herokuapp.com/")
 public class PostsController {
 
     private final PostsService postsService;

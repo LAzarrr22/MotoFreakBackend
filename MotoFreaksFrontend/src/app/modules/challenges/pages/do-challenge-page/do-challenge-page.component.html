@@ -1,7 +1,0 @@
-<ng-container *ngIf="!showSummary">
-  <app-questions [questionsList]="questions|async" (finish)="finishChallenge($event)"></app-questions>
-</ng-container>
-
-<ng-container *ngIf="showSummary">
-  <app-summary-finish-challenge [points]="obtainedPoints"></app-summary-finish-challenge>
-</ng-container>

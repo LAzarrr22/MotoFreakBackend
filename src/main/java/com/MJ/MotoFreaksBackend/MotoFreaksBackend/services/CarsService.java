@@ -17,15 +17,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @Service
 @Slf4j
 public class CarsService {
-
-    private final CarCompanyRepository carRepository;
-    private final UserService userService;
-
     @Autowired
-    public CarsService(CarCompanyRepository carRepository, UserService userService) {
-        this.carRepository = carRepository;
-        this.userService = userService;
-    }
+    private CarCompanyRepository carRepository;
+    @Autowired
+    private UserService userService;
 
 
     public Object mergeCarModel(String token, NewCarCompany newCars) {

@@ -29,17 +29,14 @@ import static org.springframework.http.ResponseEntity.ok;
 @Service
 @Slf4j
 public class UserService {
-
-    private final UserRepository userRepository;
-    private final JwtTokenProvider jwtService;
-    private final PasswordEncoder bCryptPasswordEncoder;
-
     @Autowired
-    public UserService(UserRepository userRepository, JwtTokenProvider jwtService, PasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.jwtService = jwtService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private  UserRepository userRepository;
+    @Autowired
+    private  JwtTokenProvider jwtService;
+    @Autowired
+    private  PasswordEncoder bCryptPasswordEncoder;
+
+
 
     public User getUserByToken(String token) {
         Optional<User> optionalUser = userRepository.findByUserNameOptional(jwtService.getUsername(token));

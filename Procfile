@@ -1,2 +1,2 @@
-web: java -jar target/MtFrBackend.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/MtFrBackend.jar
 

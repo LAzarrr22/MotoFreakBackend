@@ -7,16 +7,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-public class WebConfig implements  WebMvcConfigurer{
-
+public class WebConfig implements WebMvcConfigurer
+{
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET","POST","DELETE")
-                .allowedHeaders("Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
-            "Access-Control-Request-Method", "Access-Control-Request-Headers", "Origin",
-                "Cache-Control", "Content-Type");
-
+                .allowedOrigins("https://moto-freak.herokuapp.com","http://localhost:4200")
+                .allowedMethods("GET", "POST");
     }
+
+   /* @Bean
+    public WebMvcConfigurer corsConfigurer()
+    {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
+    }*/
 }

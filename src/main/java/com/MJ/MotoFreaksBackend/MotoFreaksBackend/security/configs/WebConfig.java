@@ -5,13 +5,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
-@EnableWebMvc
-public class WebConfig implements WebMvcConfigurer {
+//@Configuration
+//@EnableWebMvc
+public class WebConfig  {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("https://moto-freak.herokuapp.com").allowedMethods("GET","POST","DELETE");
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**").allowedOrigins("https://moto-freak.herokuapp.com").allowedMethods("GET","POST","DELETE");
+//    }
 
 }

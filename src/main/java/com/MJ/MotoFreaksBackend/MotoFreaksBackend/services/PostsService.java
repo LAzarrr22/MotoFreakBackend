@@ -40,7 +40,7 @@ public class PostsService {
 
     public Object getAllByType(PostType type, Map<String, String> carParam) {
         Optional<List<Post>> findPosts = postsRepository.findByTypeOptional(type);
-        List<Post> returnPosts = findPosts.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts_not_found"));
+        List<Post> returnPosts = findPosts.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found"));
         return findPostsByCar(carParam, returnPosts, type);
     }
 
@@ -55,6 +55,9 @@ public class PostsService {
             });
             returnPosts = mongoTemplate.find(query, Post.class);
 
+        }
+        if(returnPosts.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found");
         }
         return ok(returnPosts.stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()));
     }

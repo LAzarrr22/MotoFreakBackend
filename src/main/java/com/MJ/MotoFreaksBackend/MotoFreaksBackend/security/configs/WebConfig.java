@@ -13,7 +13,8 @@ public class WebConfig implements WebMvcConfigurer
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("https://moto-freak.herokuapp.com","http://localhost:4200")
-                .allowedMethods("GET", "POST");
+                .allowedMethods("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS")
+        .allowedHeaders("content-type");
     }
 
    /* @Bean

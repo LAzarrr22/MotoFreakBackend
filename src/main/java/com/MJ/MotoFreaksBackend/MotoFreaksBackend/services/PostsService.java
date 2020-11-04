@@ -33,29 +33,27 @@ public class PostsService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public Object getAll(Map<String, String> carParam) {
+    public Object getPosts(PostType type, Map<String, String> carParam, String creator) {
         List<Post> allPosts = postsRepository.findAll();
-        return findPostsByCar(carParam, allPosts, null);
+        return findPostsFilters(carParam, allPosts, type,creator);
     }
 
-    public Object getAllByType(PostType type, Map<String, String> carParam) {
-        Optional<List<Post>> findPosts = postsRepository.findByTypeOptional(type);
-        List<Post> returnPosts = findPosts.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found"));
-        return findPostsByCar(carParam, returnPosts, type);
-    }
-
-    private Object findPostsByCar(Map<String, String> carParam, List<Post> returnPosts, PostType type) {
+    private Object findPostsFilters(Map<String, String> carParam, List<Post> returnPosts, PostType type, String creatorId) {
+        Query query = new Query();
+        if (type != null) {
+            query.addCriteria(Criteria.where("type").is(type));
+        }
+        if (creatorId != null) {
+            query.addCriteria(Criteria.where("creatorId").is(creatorId));
+        }
         if (!carParam.isEmpty()) {
-            Query query = new Query();
-            if (type != null) {
-                query.addCriteria(Criteria.where("type").is(type));
-            }
             carParam.keySet().forEach(key -> {
                 query.addCriteria(Criteria.where("car." + key).is(carParam.get(key)));
             });
-            returnPosts = mongoTemplate.find(query, Post.class);
+            }
 
-        }
+        returnPosts = mongoTemplate.find(query, Post.class);
+
         if(returnPosts.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found");
         }
@@ -87,10 +85,4 @@ public class PostsService {
         return ok(model);
     }
 
-
-    public Object getPostsByCreatorId(String id) {
-        Optional<List<Post>> findPosts = postsRepository.findByCreatorIdOptional(id);
-        List<Post> returnPosts = findPosts.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts_not_found"));
-        return ok(returnPosts.stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()));
-    }
 }

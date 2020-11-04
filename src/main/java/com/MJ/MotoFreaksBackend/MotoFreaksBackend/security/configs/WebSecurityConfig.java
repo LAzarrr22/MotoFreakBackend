@@ -1,7 +1,6 @@
 package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.configs;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.Role;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.services.AuthUserService;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.services.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,17 +11,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -44,8 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().disable().csrf().disable().sessionManagement().and().authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/api/auth/login", "/api/auth/register", "/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs").permitAll()
+                .antMatchers("/","/api/auth/login", "/api/auth/register", "/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs").permitAll()
                 .antMatchers("/api/auth/check/validation", "/api/auth/roles", "/user/**", "/challenge/get/**", "/challenge/id/**", "/cars/all/**", "/message/**", "/posts/**").hasAuthority(Role.USER.toString())
                 .antMatchers(HttpMethod.GET, "/cars/merge/**", "/cars/delete/**").hasAuthority(Role.MODERATOR.toString())
                 .antMatchers(HttpMethod.POST, "/api/auth/set-role/moderator/**", "/challenge/create/**").hasAuthority(Role.MODERATOR.toString())

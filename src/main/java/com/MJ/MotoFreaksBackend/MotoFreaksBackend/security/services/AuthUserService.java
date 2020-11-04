@@ -10,6 +10,7 @@ import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.configs.JwtTokenProvi
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts.AuthorizationHeader;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.request.AuthBody;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.request.RegisterBody;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.response.LoginModelDto;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.RoleService;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @Service
 @Slf4j
-public class AuthUserService  {
+public class AuthUserService {
     @Autowired
     private UserRepository userRepository;
 
@@ -63,12 +64,18 @@ public class AuthUserService  {
         userRepository.save(currentUser);
         List<Role> roles = new ArrayList<>();
         currentUser.getUserRoles().forEach(userRoles -> roles.add(userRoles.getRole()));
-        Map<Object, Object> model = new HashMap<>();
-        model.put("username", username);
-        model.put("token", AuthorizationHeader.TOKEN_PREFIX + token);
-        model.put("roles", roles);
+
+        LoginModelDto loginSuccess = new LoginModelDto(username, checkValidateUser(currentUser), AuthorizationHeader.TOKEN_PREFIX + token, roles);
         log.info("User " + currentUser.getId() + " was logged correctly.");
-        return ok(model);
+        return ok(loginSuccess);
+    }
+
+    private boolean checkValidateUser(User currentUser) {
+        boolean validation = true;
+        if (currentUser.getAddress() == null ||currentUser.getGender() == null || currentUser.getCarsList().isEmpty()) {
+            validation = false;
+        }
+        return validation;
     }
 
     public Object registerUser(RegisterBody data, Role role) {

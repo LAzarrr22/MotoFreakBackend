@@ -134,4 +134,9 @@ public class AuthUserService {
         currentUser.getUserRoles().forEach(userRoles -> roles.add(userRoles.getRole()));
         return ok(roles);
     }
+
+    public Object checkUser(String token) {
+        User currentUser = userService.getUserByToken(token);
+        return ok(checkValidateUser(currentUser));
+    }
 }

@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable().csrf().disable().sessionManagement().and().authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .antMatchers("/api/auth/login", "/api/auth/register", "/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs").permitAll()
-                .antMatchers("/api/auth/roles", "/user/**", "/challenge/get/**", "/challenge/id/**", "/cars/all/**", "/message/**", "/posts/**").hasAuthority(Role.USER.toString())
+                .antMatchers("/api/auth/check/validation", "/api/auth/roles", "/user/**", "/challenge/get/**", "/challenge/id/**", "/cars/all/**", "/message/**", "/posts/**").hasAuthority(Role.USER.toString())
                 .antMatchers(HttpMethod.GET, "/cars/merge/**", "/cars/delete/**").hasAuthority(Role.MODERATOR.toString())
                 .antMatchers(HttpMethod.POST, "/api/auth/set-role/moderator/**", "/challenge/create/**").hasAuthority(Role.MODERATOR.toString())
                 .antMatchers("/**").hasAuthority(Role.ADMIN.toString())

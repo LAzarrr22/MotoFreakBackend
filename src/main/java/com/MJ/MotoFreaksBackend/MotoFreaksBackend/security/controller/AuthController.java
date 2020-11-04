@@ -34,6 +34,12 @@ public class AuthController {
         return customUserAuthService.registerUser(user, Role.USER);
     }
 
+    @GetMapping("/check/validation")
+    public Object checkValidation(HttpServletRequest req) {
+        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
+        return customUserAuthService.checkUser(token);
+    }
+
     @PostMapping("/set-role/moderator/{id}")
     public Object addModeratorRole(@PathVariable String id) {
         return customUserAuthService.addRole(id, Role.MODERATOR);

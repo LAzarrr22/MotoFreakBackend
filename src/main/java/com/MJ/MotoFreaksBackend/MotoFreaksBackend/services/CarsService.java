@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
@@ -23,7 +24,7 @@ public class CarsService {
     private UserService userService;
 
 
-    public Object mergeCarModel(String token, NewCarCompany newCars) {
+    public Object mergeCarModel(String token, NewCarCompany newCars, Map<String, String> carParam) {
         Map<Object, Object> responseModel = new HashMap<>();
         try {
             CarCompany carCompanyExists = getCompanyByName(newCars.getCompany());
@@ -49,7 +50,7 @@ public class CarsService {
 
     private List<String> mergeGenerationList(List<String> exists, List<String> newList) {
         newList.removeAll(exists);
-        newList.addAll(exists);
+        newList.addAll(newList);
         return newList;
     }
 
@@ -106,6 +107,49 @@ public class CarsService {
     public Object getGenerations(String company, String model) {
 
         return ok(Ordering.natural().sortedCopy(getCompanyByName(company).getModelList().get(model)));
+    }
+
+    public Object addCompany(String token, String company) {
+        Optional<CarCompany> optionalCarCompany = carRepository.findCarByCompany(company);
+        if (optionalCarCompany.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Company is already exists.");
+        } else {
+            CarCompany carCompany = new CarCompany();
+            carCompany.setCompany(company);
+            carCompany.setCreatedDate(new Date());
+            carCompany.setModelList(new HashMap<>());
+            carCompany.setCreatorId(userService.getUserByToken(token).getId());
+            log.info("Company " + carCompany.getCompany() + " was added.");
+            this.carRepository.save(carCompany);
+        }
+        return getAllCompanies();
+    }
+
+    public Object addModel(String company, String model) {
+        CarCompany existsCarCompany = getCompanyByName(company);
+        if(existsCarCompany.getModelList().keySet().stream().anyMatch(mod->mod.equals(model))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Model is already exists.");
+        }
+        existsCarCompany.setUpdatedDate(new Date());
+        existsCarCompany.getModelList().put(model, new ArrayList<>());
+        log.info("Model " + model + " was added to " + company);
+        this.carRepository.save(existsCarCompany);
+        return getModels(company);
+    }
+
+    public Object addGeneration(String company, String model, String generation) {
+        CarCompany existsCarCompany = getCompanyByName(company);
+        if(existsCarCompany.getModelList().get(model)==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Model not found");
+        }
+        if(existsCarCompany.getModelList().get(model).stream().anyMatch(gen -> gen.equals(generation))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Generation is already exists.");
+        }
+        existsCarCompany.setUpdatedDate(new Date());
+        existsCarCompany.getModelList().get(model).add(generation);
+        log.info("Generation " + generation + " was added to " + model + " from "+ company);
+        this.carRepository.save(existsCarCompany);
+        return getGenerations(company,model);
     }
 }
 

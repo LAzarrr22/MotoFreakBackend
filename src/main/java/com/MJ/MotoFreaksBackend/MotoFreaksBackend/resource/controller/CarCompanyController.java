@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/cars")
@@ -23,9 +24,25 @@ public class CarCompanyController {
 
 
     @RequestMapping(path = "/merge", method = RequestMethod.POST, produces = "application/json")
-    public Object merge(HttpServletRequest req, @RequestBody NewCarCompany NewCarCompany) {
+    public Object merge(HttpServletRequest req, @RequestBody NewCarCompany NewCarCompany, @RequestParam Map<String, String> carParam) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return this.carsService.mergeCarModel(token, NewCarCompany);
+        return this.carsService.mergeCarModel(token, NewCarCompany,carParam);
+    }
+
+    @RequestMapping(path = "/add/company/{company}", method = RequestMethod.POST, produces = "application/json")
+    public Object addCompany(HttpServletRequest req,@PathVariable String company) {
+        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
+        return this.carsService.addCompany(token, company);
+    }
+
+    @RequestMapping(path = "/add/company/{company}/model/{model}", method = RequestMethod.POST, produces = "application/json")
+    public Object addModel(@PathVariable String company, @PathVariable String model) {
+        return this.carsService.addModel(company, model);
+    }
+
+    @RequestMapping(path = "/add/company/{company}/model/{model}/generation/{generation}", method = RequestMethod.POST, produces = "application/json")
+    public Object addGeneration(@PathVariable String company, @PathVariable String model, @PathVariable String generation) {
+        return this.carsService.addGeneration(company, model, generation);
     }
 
     @RequestMapping(path = "/delete/company/{company}", method = RequestMethod.DELETE, produces = "application/json")

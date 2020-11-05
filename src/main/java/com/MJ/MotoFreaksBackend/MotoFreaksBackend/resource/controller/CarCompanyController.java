@@ -35,28 +35,28 @@ public class CarCompanyController {
         return this.carsService.addCompany(token, company);
     }
 
-    @RequestMapping(path = "/add/company/{company}/model/{model}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/add/model/{company}/{model}", method = RequestMethod.POST, produces = "application/json")
     public Object addModel(@PathVariable String company, @PathVariable String model) {
         return this.carsService.addModel(company, model);
     }
 
-    @RequestMapping(path = "/add/company/{company}/model/{model}/generation/{generation}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/add/generation/{company}/{model}/{generation}", method = RequestMethod.POST, produces = "application/json")
     public Object addGeneration(@PathVariable String company, @PathVariable String model, @PathVariable String generation) {
         return this.carsService.addGeneration(company, model, generation);
     }
 
     @RequestMapping(path = "/delete/company/{company}", method = RequestMethod.DELETE, produces = "application/json")
-    public Object delete(@PathVariable("company") String company) {
+    public Object delete(@PathVariable String company) {
         return this.carsService.deleteCompany(company);
     }
 
-    @RequestMapping(path = "/delete/company/{company}/model/{model}", method = RequestMethod.DELETE, produces = "application/json")
-    public Object delete(@PathVariable("company") String company, @PathVariable("model") String model) {
+    @RequestMapping(path = "/delete/model/{company}/{model}", method = RequestMethod.DELETE, produces = "application/json")
+    public Object delete(@PathVariable String company, @PathVariable String model) {
         return this.carsService.deleteModel(company, model);
     }
 
-    @RequestMapping(path = "/delete/company/{company}/model/{model}/generation/{generation}", method = RequestMethod.DELETE, produces = "application/json")
-    public Object delete(@PathVariable("company") String company, @PathVariable("model") String model, @PathVariable("generation") String generation) {
+    @RequestMapping(path = "/delete/generation/{company}/{model}/{generation}", method = RequestMethod.DELETE, produces = "application/json")
+    public Object delete(@PathVariable String company, @PathVariable String model, @PathVariable String generation) {
         return this.carsService.deleteGeneration(company, model, generation);
     }
 

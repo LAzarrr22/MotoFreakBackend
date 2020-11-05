@@ -55,32 +55,26 @@ public class CarsService {
     }
 
     public Object deleteCompany(String company) {
-        Map<Object, Object> responseModel = new HashMap<>();
         CarCompany carCompanyExists = getCompanyByName(company);
         this.carRepository.delete(carCompanyExists);
-        responseModel.put("message", "Company " + company + " was removed.");
         log.info("Company " + company + " was removed.");
-        return ok(responseModel);
+        return getAllCompanies();
     }
 
     public Object deleteModel(String company, String model) {
-        Map<Object, Object> responseModel = new HashMap<>();
         CarCompany carCompanyExists = getCompanyByName(company);
         carCompanyExists.getModelList().remove(model);
         this.carRepository.save(carCompanyExists);
-        responseModel.put("message", "Model " + model + " from " + company + " was removed.");
         log.info("Model " + model + " from " + company + " was removed.");
-        return ok(responseModel);
+        return getModels(company);
     }
 
     public Object deleteGeneration(String company, String model, String generation) {
-        Map<Object, Object> responseModel = new HashMap<>();
         CarCompany carCompanyExists = getCompanyByName(company);
         carCompanyExists.getModelList().get(model).remove(generation);
         this.carRepository.save(carCompanyExists);
-        responseModel.put("message", "Generation " + generation + " from model " + model + " from " + company + " was removed.");
         log.info("Generation " + generation + " from model " + model + " from " + company + " was removed.");
-        return ok(responseModel);
+        return getGenerations(company,model);
     }
 
     public List<CarCompany> findAll() {

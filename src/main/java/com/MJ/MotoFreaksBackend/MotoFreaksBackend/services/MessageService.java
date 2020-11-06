@@ -39,7 +39,7 @@ public class MessageService {
 
         model.put("message", "Message sent to " + receiverId + " from " + senderUser.getId());
         log.info("Message sent to " + receiverId + " from " + senderUser.getId());
-        return ok(model);
+        return getMessages(token);
     }
 
     private User addMessage(User user, String secondId, Message message, boolean isReceived) {

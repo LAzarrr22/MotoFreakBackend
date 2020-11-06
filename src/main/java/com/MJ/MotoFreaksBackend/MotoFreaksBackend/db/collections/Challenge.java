@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Document(collection = "Challenges")
@@ -25,6 +26,6 @@ public class Challenge {
     private String generation;
     private String creatorId;
     private List<QuestionAnswer> qaList;
-    private List<String> competitorIdList;
+    private Map<String,Integer> competitorIdList;
 
 }

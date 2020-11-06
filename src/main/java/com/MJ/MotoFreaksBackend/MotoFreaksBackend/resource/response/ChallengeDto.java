@@ -14,6 +14,7 @@ public class ChallengeDto {
     private String generation;
     private String creatorId;
     private boolean alreadyFilled;
+    private int obtainPoints;
     private int questionsCount;
     private int allPoints;
 }

@@ -46,7 +46,7 @@ public class ChallengeService {
             newChallenge.setModel(challenge.getModel());
             newChallenge.setGeneration(challenge.getGeneration());
             newChallenge.setQaList(challenge.getQaList());
-            newChallenge.setCompetitorIdList(new ArrayList<>());
+            newChallenge.setCompetitorIdList(new HashMap<>());
             challengeRepository.save(newChallenge);
             model.put("message", "Challenge " + challenge.getName() + " was created.");
             log.info("Challenge " + challenge.getName() + " was created by " + newChallenge.getCreatorId());
@@ -54,11 +54,11 @@ public class ChallengeService {
         return ok(model);
     }
 
-    public Object addCompetitor(String token, String id) {
+    public Object addCompetitor(String token, String id, int obtainPoints) {
         Map<Object, Object> model = new HashMap<>();
         String userId = userService.getUserByToken(token).getId();
         Challenge foundChallenge = findById(id);
-        foundChallenge.getCompetitorIdList().add(userId);
+        foundChallenge.getCompetitorIdList().put(userId,obtainPoints);
         challengeRepository.save(foundChallenge);
         model.put("message", "Added competitor to " + foundChallenge.getName() + " challenge");
         log.info("Added competitor " + userId + " to " + foundChallenge.getName() + " challenge ");
@@ -73,8 +73,7 @@ public class ChallengeService {
         });
         List<Challenge> challengeList = mongoTemplate.find(query, Challenge.class);
         if (challengeList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Challenge not found");
-        }
+         }
         return sortByName(mappingToDtoChallenges(challengeList, userId), true);
     }
 
@@ -114,9 +113,16 @@ public class ChallengeService {
         List<ChallengeDto> challengeDtoList = new ArrayList<>();
         challengeList.forEach(challenge -> {
             challengeDtoList.add(new ChallengeDto(challenge.getId(), challenge.getName(), challenge.getCompany(), challenge.getModel()
-                    , challenge.getGeneration(), challenge.getCreatorId(), isAlreadyFilled(userId, challenge), challenge.getQaList().size(), countAllPoints(challenge.getQaList())));
+                    , challenge.getGeneration(), challenge.getCreatorId(), isAlreadyFilled(userId, challenge),obtainPoints(userId,challenge), challenge.getQaList().size(), countAllPoints(challenge.getQaList())));
         });
         return challengeDtoList;
+    }
+
+    private int obtainPoints(String userId, Challenge challenge) {
+        if(isAlreadyFilled(userId,challenge)){
+            return challenge.getCompetitorIdList().get(userId);
+        }
+        return 0;
     }
 
     private int countAllPoints(List<QuestionAnswer> questionList) {
@@ -129,8 +135,8 @@ public class ChallengeService {
     }
 
     private boolean isAlreadyFilled(String userId, Challenge challenge) {
-        String commonFriends = challenge.getCompetitorIdList().stream().filter(userId::equals).findAny().orElse("");
-        return !commonFriends.isEmpty();
+        String userFound = challenge.getCompetitorIdList().keySet().stream().filter(userId::equals).findAny().orElse("");
+        return !userFound.isEmpty();
     }
 
 }

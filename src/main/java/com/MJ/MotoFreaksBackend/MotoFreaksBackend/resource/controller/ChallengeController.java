@@ -26,10 +26,10 @@ public class ChallengeController {
         return challengeService.createChallenge(token, challenge);
     }
 
-    @RequestMapping(path = "/id/{id}/add/competitor", method = RequestMethod.POST, produces = "application/json")
-    public Object addCompetitor(HttpServletRequest req, @PathVariable String id) {
+    @RequestMapping(path = "/id/{id}/add/competitor/points/{points}", method = RequestMethod.POST, produces = "application/json")
+    public Object addCompetitor(HttpServletRequest req, @PathVariable String id, @PathVariable int points) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return challengeService.addCompetitor(token, id);
+        return challengeService.addCompetitor(token, id, points);
     }
 
     @RequestMapping(path = "/get/all", method = RequestMethod.GET, produces = "application/json")

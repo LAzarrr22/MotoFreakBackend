@@ -99,7 +99,9 @@ public class CarsService {
     }
 
     public Object getGenerations(String company, String model) {
-
+if(getCompanyByName(company).getModelList().get(model)==null){
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Model not found");
+}
         return ok(Ordering.natural().sortedCopy(getCompanyByName(company).getModelList().get(model)));
     }
 

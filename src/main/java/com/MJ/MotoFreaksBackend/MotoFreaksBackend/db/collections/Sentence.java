@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Document(collection = "Users")
+@Document(collection = "Sentence")
 @Data
 public class Sentence {
     @Id
@@ -15,6 +15,7 @@ public class Sentence {
     private String name;
     private String translation;
     private String creatorId;
+    private String updatedById;
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private Date createdDate;
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")

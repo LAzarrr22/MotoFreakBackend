@@ -39,10 +39,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().disable().csrf().disable().sessionManagement().and().authorizeRequests()
                 .antMatchers("/","/api/auth/login", "/api/auth/register", "/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs").permitAll()
-                .antMatchers("/api/auth/check/validation", "/api/auth/roles", "/user/**", "/challenge/get/**", "/challenge/id/**", "/cars/all/**", "/message/**", "/posts/**").hasAuthority(Role.USER.toString())
-                .antMatchers(HttpMethod.GET, "/cars/merge/**").hasAuthority(Role.MODERATOR.toString())
-                .antMatchers(HttpMethod.DELETE, "/cars/delete/**").hasAuthority(Role.MODERATOR.toString())
-                .antMatchers(HttpMethod.POST, "/api/auth/set-role/moderator/**", "/challenge/create/**", "/cars/add/**").hasAuthority(Role.MODERATOR.toString())
+                //USER
+                .antMatchers("/api/auth/check/validation", "/api/auth/roles", "/user/**",
+                        "/challenge/get/**", "/challenge/id/**", "/cars/all/**",
+                        "/message/**", "/posts/**", "/sentence/get/all").hasAuthority(Role.USER.toString())
+                //MODERATOR- DELETE
+                .antMatchers(HttpMethod.DELETE, "/cars/delete/**", "/sentence/modify/delete/**").hasAuthority(Role.MODERATOR.toString())
+                //MODERATOR- POST
+                .antMatchers(HttpMethod.POST, "/api/auth/set-role/moderator/**",
+                        "/challenge/create/**", "/cars/add/**", "/sentence/modify/**").hasAuthority(Role.MODERATOR.toString())
+                //ADMIN
                 .antMatchers("/**").hasAuthority(Role.ADMIN.toString())
                 .anyRequest().authenticated()
                 .and().csrf()

@@ -24,15 +24,10 @@ public class SentenceController {
         return sentenceService.getAllSorted();
     }
 
-    @RequestMapping(path = "/modify/add", method = RequestMethod.POST, produces = "application/json")
-    public Object addSentence(HttpServletRequest req, @RequestBody NewSentence newSentence){
+    @RequestMapping(path = "/modify/merge", method = RequestMethod.POST, produces = "application/json")
+    public Object mergeSentence(HttpServletRequest req, @RequestBody NewSentence newSentence){
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return sentenceService.createNewTranslation(token,newSentence);
-    }
-    @RequestMapping(path = "/modify/merge/{id}", method = RequestMethod.POST, produces = "application/json")
-    public Object addSentence(HttpServletRequest req, @RequestBody NewSentence newSentence, @PathVariable String id){
-        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return sentenceService.merge(token,id,newSentence);
+        return sentenceService.merge(token,newSentence);
     }
     @RequestMapping(path = "/modify/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public Object deleteSentence(@PathVariable String id){

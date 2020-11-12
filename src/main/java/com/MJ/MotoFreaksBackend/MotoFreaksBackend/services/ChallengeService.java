@@ -55,6 +55,13 @@ public class ChallengeService {
         return ok(model);
     }
 
+    public Object deleteChallenge(String id) {
+        Map<Object, Object> model = new HashMap<>();
+       challengeRepository.deleteById(id);
+        model.put("message", "Challenge " + id + " was removed");
+        return ok(model);
+    }
+
     public Object addCompetitor(String token, String id, int obtainPoints) {
         Map<Object, Object> model = new HashMap<>();
         String userId = userService.getUserByToken(token).getId();
@@ -145,6 +152,7 @@ public class ChallengeService {
         String userFound = challenge.getCompetitorIdList().keySet().stream().filter(userId::equals).findAny().orElse("");
         return !userFound.isEmpty();
     }
+
 
 
 }

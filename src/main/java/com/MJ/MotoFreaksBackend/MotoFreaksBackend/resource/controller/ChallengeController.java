@@ -27,6 +27,11 @@ public class ChallengeController {
         return challengeService.createChallenge(token, challenge);
     }
 
+  @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public Object deleteChallenge(@PathVariable String id) {
+        return challengeService.deleteChallenge(id);
+    }
+
     @RequestMapping(path = "/id/{id}/add/competitor/points/{points}", method = RequestMethod.POST, produces = "application/json")
     public Object addCompetitor(HttpServletRequest req, @PathVariable String id, @PathVariable int points) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Slf4j
-@CrossOrigin("https://moto-freaks.herokuapp.com")
 @RequestMapping("/api/auth")
 public class AuthController {
 

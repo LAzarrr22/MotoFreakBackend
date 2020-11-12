@@ -1,5 +1,6 @@
 package com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections;
 
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostState;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostType;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Address;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.CarDataModel;
@@ -23,6 +24,7 @@ public class Post {
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private Date createdDate;
     private String creatorId;
+    private PostState state;
     private List<String> userIdLikes;
     private Address location;
     private CarDataModel car;

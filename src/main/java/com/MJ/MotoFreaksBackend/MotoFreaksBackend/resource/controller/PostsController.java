@@ -50,7 +50,12 @@ public class PostsController {
     }
 
     @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public Object getMyPosts(@PathVariable String id) {
+    public Object deleteMyPost(@PathVariable String id) {
         return postsService.deletePost(id);
+    }
+
+    @RequestMapping(path = "/resolve/{id}", method = RequestMethod.POST, produces = "application/json")
+    public Object resolveMyPosts(@PathVariable String id) {
+        return postsService.resolvePost(id);
     }
 }

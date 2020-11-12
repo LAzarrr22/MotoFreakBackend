@@ -1,7 +1,7 @@
 package com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums;
 
-public enum TopicState {
+public enum PostState {
     OPEN,
-    CLOSED,
+    RESOLVED,
 
 }

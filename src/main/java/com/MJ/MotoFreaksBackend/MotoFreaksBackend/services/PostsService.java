@@ -2,6 +2,7 @@ package com.MJ.MotoFreaksBackend.MotoFreaksBackend.services;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.Post;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.User;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostState;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostType;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.repository.PostsRepository;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewPost;
@@ -72,6 +73,7 @@ public class PostsService {
         post.setLocation(newPost.getLocation());
         post.setUserIdLikes(new ArrayList<>());
         post.setCar(newPost.getCar());
+        post.setState(PostState.OPEN);
         postsRepository.save(post);
         model.put("message", "Post added successful.");
         return ok(model);
@@ -85,4 +87,12 @@ public class PostsService {
         return ok(model);
     }
 
+    public Object resolvePost(String id) {
+        Map<Object, Object> model = new HashMap<>();
+        Post post = postsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
+        post.setState(PostState.RESOLVED);
+        postsRepository.save(post);
+        model.put("message", "Post " + id + " set resolved.");
+        return ok(model);
+    }
 }

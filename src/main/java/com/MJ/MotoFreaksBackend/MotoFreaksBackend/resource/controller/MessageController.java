@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/message")
 @Slf4j
+@CrossOrigin("*")
 public class MessageController {
 
     private final MessageService messageService;

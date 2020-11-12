@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Slf4j
+@CrossOrigin("*")
 @RequestMapping("/api/auth")
 public class AuthController {
 

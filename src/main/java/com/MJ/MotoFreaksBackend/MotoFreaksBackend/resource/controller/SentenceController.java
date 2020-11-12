@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/sentence")
+@CrossOrigin("*")
 public class SentenceController {
 
     private final SentenceService sentenceService;

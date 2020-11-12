@@ -45,6 +45,7 @@ public class ChallengeService {
             newChallenge.setCompany(challenge.getCompany());
             newChallenge.setModel(challenge.getModel());
             newChallenge.setGeneration(challenge.getGeneration());
+            newChallenge.setGeneral(challenge.isGeneral());
             newChallenge.setQaList(challenge.getQaList());
             newChallenge.setCompetitorIdList(new HashMap<>());
             challengeRepository.save(newChallenge);
@@ -113,7 +114,7 @@ public class ChallengeService {
         List<ChallengeDto> challengeDtoList = new ArrayList<>();
         challengeList.forEach(challenge -> {
             challengeDtoList.add(new ChallengeDto(challenge.getId(), challenge.getName(), challenge.getCompany(), challenge.getModel()
-                    , challenge.getGeneration(), challenge.getCreatorId(), isAlreadyFilled(userId, challenge),obtainPoints(userId,challenge), challenge.getQaList().size(), countAllPoints(challenge.getQaList())));
+                    , challenge.getGeneration(), challenge.getCreatorId(), challenge.isGeneral(), isAlreadyFilled(userId, challenge),obtainPoints(userId,challenge), challenge.getQaList().size(), countAllPoints(challenge.getQaList())));
         });
         return challengeDtoList;
     }

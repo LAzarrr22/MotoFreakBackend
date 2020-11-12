@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class NewChallengeModel {
     private String name;
+    private boolean general;
     private String company;
     private String model;
     private String generation;

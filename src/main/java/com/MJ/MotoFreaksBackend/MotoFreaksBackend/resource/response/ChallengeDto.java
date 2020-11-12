@@ -13,6 +13,7 @@ public class ChallengeDto {
     private String model;
     private String generation;
     private String creatorId;
+    private boolean general;
     private boolean alreadyFilled;
     private int obtainPoints;
     private int questionsCount;

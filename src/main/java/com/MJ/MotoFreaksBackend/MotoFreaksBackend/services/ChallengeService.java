@@ -102,6 +102,12 @@ public class ChallengeService {
         return sortByName(mappingToDtoChallenges(challengeList, userId), true);
     }
 
+    public Object getAllGeneral(String token) {
+        String userId = userService.getUserByToken(token).getId();
+        List<Challenge> challengeList = challengeRepository.findAll().stream().filter(challenge -> challenge.isGeneral()).collect(Collectors.toList());
+        return sortByName(mappingToDtoChallenges(challengeList, userId), true);
+    }
+
     private List<ChallengeDto> sortByName(List<ChallengeDto> mixList, boolean direction) {
         if (direction) {
             return mixList.stream().sorted(Comparator.comparing(ChallengeDto::getName)).collect(Collectors.toList());
@@ -139,5 +145,6 @@ public class ChallengeService {
         String userFound = challenge.getCompetitorIdList().keySet().stream().filter(userId::equals).findAny().orElse("");
         return !userFound.isEmpty();
     }
+
 
 }

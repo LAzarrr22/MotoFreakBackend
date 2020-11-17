@@ -61,6 +61,7 @@ public class PostsService {
         if(returnPosts.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found");
         }
+        returnPosts.forEach(post -> post.setComments(post.getComments().stream().sorted(Comparator.comparing(Comment::getCreatedDate)).collect(Collectors.toList())));
         return ok(returnPosts.stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()));
     }
 

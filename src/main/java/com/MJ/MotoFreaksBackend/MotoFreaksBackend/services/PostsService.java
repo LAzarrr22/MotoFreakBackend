@@ -94,7 +94,7 @@ public class PostsService {
     public Object resolvePost(String id) {
         Map<Object, Object> model = new HashMap<>();
         Post post = postsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
-        post.setState(PostState.RESOLVED);
+        post.setState(PostState.CLOSED);
         postsRepository.save(post);
         model.put("message", "Post " + id + " set resolved.");
         return ok(model);

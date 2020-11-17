@@ -4,6 +4,7 @@ import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostState;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostType;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Address;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.CarDataModel;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Comment;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,5 +29,6 @@ public class Post {
     private List<String> userIdLikes;
     private Address location;
     private CarDataModel car;
+    private List<Comment> comments;
 
 }

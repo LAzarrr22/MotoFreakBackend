@@ -4,9 +4,11 @@ import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.Post;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.User;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostState;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostType;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Comment;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.repository.PostsRepository;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewPost;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -74,6 +77,7 @@ public class PostsService {
         post.setUserIdLikes(new ArrayList<>());
         post.setCar(newPost.getCar());
         post.setState(PostState.OPEN);
+        post.setComments(new ArrayList<>());
         postsRepository.save(post);
         model.put("message", "Post added successful.");
         return ok(model);
@@ -89,10 +93,73 @@ public class PostsService {
 
     public Object resolvePost(String id) {
         Map<Object, Object> model = new HashMap<>();
-        Post post = postsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
+        Post post = postsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
         post.setState(PostState.RESOLVED);
         postsRepository.save(post);
         model.put("message", "Post " + id + " set resolved.");
         return ok(model);
+    }
+
+    public Object addComment(String token, String postId, String comment) {
+        Map<Object, Object> model = new HashMap<>();
+        User currentUser = userService.getUserByToken(token);
+        Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+        Comment newComment = new Comment(new ObjectId().toString(), comment,currentUser.getId(),new Date(), new ArrayList<>(),new ArrayList<>());
+        if(Objects.isNull(post.getComments())){
+            post.setComments(new ArrayList<>());
+        }
+        post.getComments().add(newComment);
+        postsRepository.save(post);
+        model.put("message", "Add  " + comment + " to "+ postId + " post.");
+        return ok(model);
+    }
+
+    public Object deleteComment(String postId, String id) {
+        Map<Object, Object> model = new HashMap<>();
+        Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+       post.getComments().removeIf(comment -> comment.getId().equals(id));
+        postsRepository.save(post);
+        model.put("message", "Comment from " + postId + " post deleted.");
+        return ok(model);
+    }
+
+    public Object approveComment(String token, String postId, String id) {
+        Map<Object, Object> model = new HashMap<>();
+        User currentUser = userService.getUserByToken(token);
+        Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+        post.getComments().forEach(comment->{
+            if(comment.getId().equals(id)){
+                if(!isUserAlreadyAtList(currentUser.getId(), comment.getApproved())){
+                    comment.getApproved().add(currentUser.getId());
+                    model.put("message", "Approved comment " + id + " by " + currentUser.getId());
+                }else{
+                    model.put("message", "User ia already evaluate comment " + id);
+                }
+            }
+        });
+        postsRepository.save(post);
+        return ok(model);
+    }
+
+    public Object rejectComment(String token, String postId, String id) {
+        Map<Object, Object> model = new HashMap<>();
+        User currentUser = userService.getUserByToken(token);
+        Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+            post.getComments().forEach(comment -> {
+                if (comment.getId().equals(id)) {
+                    if(!isUserAlreadyAtList(currentUser.getId(), comment.getRejected())){
+                        comment.getRejected().add(currentUser.getId());
+                        model.put("message", "Rejected comment " + id + " by " + currentUser.getId());
+                    }else{
+                        model.put("message", "User ia already evaluate comment " + id);
+                    }
+                }
+            });
+            postsRepository.save(post);
+        return ok(model);
+    }
+
+    private boolean isUserAlreadyAtList(String id, List<String> list){
+        return list.stream().anyMatch(item->item.equals(id));
     }
 }

@@ -58,4 +58,27 @@ public class PostsController {
     public Object resolveMyPosts(@PathVariable String id) {
         return postsService.resolvePost(id);
     }
+
+    @RequestMapping(path = "/{postId}/add/comment", method = RequestMethod.POST, produces = "application/json")
+    public Object addComment(HttpServletRequest req, @PathVariable String postId, @RequestBody String comment) {
+        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
+        return postsService.addComment(token, postId, comment);
+    }
+
+    @RequestMapping(path = "/{postId}/delete/comment/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public Object deleteComment(@PathVariable String postId,  @PathVariable String id) {
+        return postsService.deleteComment(postId, id);
+    }
+
+    @RequestMapping(path = "/{postId}/approve/comment/{id}", method = RequestMethod.POST, produces = "application/json")
+    public Object approveComment(HttpServletRequest req, @PathVariable String postId,  @PathVariable String id) {
+        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
+        return postsService.approveComment(token,postId, id);
+    }
+
+    @RequestMapping(path = "/{postId}/reject/comment/{id}", method = RequestMethod.POST, produces = "application/json")
+    public Object rejectComment(HttpServletRequest req, @PathVariable String postId,  @PathVariable String id) {
+        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
+        return postsService.rejectComment(token,postId, id);
+    }
 }

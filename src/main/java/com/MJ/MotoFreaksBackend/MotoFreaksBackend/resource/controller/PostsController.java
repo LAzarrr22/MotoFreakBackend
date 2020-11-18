@@ -2,6 +2,7 @@ package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.controller;
 
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostType;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewMessage;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewPost;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts.AuthorizationHeader;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.PostsService;
@@ -60,9 +61,9 @@ public class PostsController {
     }
 
     @RequestMapping(path = "/{postId}/add/comment", method = RequestMethod.POST, produces = "application/json")
-    public Object addComment(HttpServletRequest req, @PathVariable String postId, @RequestBody String comment) {
+    public Object addComment(HttpServletRequest req, @PathVariable String postId, @RequestBody NewMessage newComment) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return postsService.addComment(token, postId, comment);
+        return postsService.addComment(token, postId, newComment);
     }
 
     @RequestMapping(path = "/{postId}/delete/comment/{id}", method = RequestMethod.DELETE, produces = "application/json")

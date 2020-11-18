@@ -6,6 +6,7 @@ import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostState;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostType;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Comment;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.repository.PostsRepository;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewMessage;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewPost;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -101,11 +102,11 @@ public class PostsService {
         return ok(model);
     }
 
-    public Object addComment(String token, String postId, String comment) {
+    public Object addComment(String token, String postId, NewMessage comment) {
         Map<Object, Object> model = new HashMap<>();
         User currentUser = userService.getUserByToken(token);
         Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
-        Comment newComment = new Comment(new ObjectId().toString(), comment,currentUser.getId(),new Date(), new ArrayList<>(),new ArrayList<>());
+        Comment newComment = new Comment(new ObjectId().toString(), comment.getContent(),currentUser.getId(),new Date(), new ArrayList<>(),new ArrayList<>());
         if(Objects.isNull(post.getComments())){
             post.setComments(new ArrayList<>());
         }

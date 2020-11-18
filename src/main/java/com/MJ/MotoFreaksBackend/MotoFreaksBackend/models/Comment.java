@@ -14,7 +14,7 @@ import java.util.List;
 public class Comment {
 
     private String id;
-    private String context;
+    private String content;
     private String creatorId;
     private Date createdDate;
     private List<String> approved;

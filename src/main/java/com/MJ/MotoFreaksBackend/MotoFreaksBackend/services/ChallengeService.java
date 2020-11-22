@@ -41,18 +41,34 @@ public class ChallengeService {
             Challenge newChallenge = new Challenge();
             newChallenge.setCreatedDate(new Date());
             newChallenge.setCreatorId(userService.getUserByToken(token).getId());
-            newChallenge.setName(challenge.getName());
-            newChallenge.setCompany(challenge.getCompany());
-            newChallenge.setModel(challenge.getModel());
-            newChallenge.setGeneration(challenge.getGeneration());
-            newChallenge.setGeneral(challenge.isGeneral());
-            newChallenge.setQaList(challenge.getQaList());
             newChallenge.setCompetitorIdList(new HashMap<>());
-            challengeRepository.save(newChallenge);
+
+            mapRequestToDB(challenge,newChallenge);
             model.put("message", "Challenge " + challenge.getName() + " was created.");
             log.info("Challenge " + challenge.getName() + " was created by " + newChallenge.getCreatorId());
         }
         return ok(model);
+    }
+
+    public Object mergeChallenge(String challengeId, NewChallengeModel challenge) {
+        Challenge existsChallenge = findById(challengeId);
+        Map<Object, Object> model = new HashMap<>();
+        existsChallenge.setUpdatedDate(new Date());
+        mapRequestToDB(challenge, existsChallenge);
+            model.put("message", "Challenge " + challenge.getName() + " was merged.");
+            log.info("Challenge " + challenge.getName() + " was merged.");
+
+        return ok(model);
+    }
+
+    private void mapRequestToDB(NewChallengeModel requestChallenge, Challenge mergeChallenge) {
+        mergeChallenge.setName(requestChallenge.getName());
+        mergeChallenge.setCompany(requestChallenge.getCompany());
+        mergeChallenge.setModel(requestChallenge.getModel());
+        mergeChallenge.setGeneration(requestChallenge.getGeneration());
+        mergeChallenge.setGeneral(requestChallenge.isGeneral());
+        mergeChallenge.setQaList(requestChallenge.getQaList());
+        challengeRepository.save(mergeChallenge);
     }
 
     public Object deleteChallenge(String id) {

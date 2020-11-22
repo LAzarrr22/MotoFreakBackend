@@ -27,6 +27,11 @@ public class ChallengeController {
         return challengeService.createChallenge(token, challenge);
     }
 
+    @RequestMapping(path = "/merge/{id}", method = RequestMethod.POST, produces = "application/json")
+    public Object mergeChallenge(@PathVariable String id, @RequestBody NewChallengeModel challenge) {
+        return challengeService.mergeChallenge(id, challenge);
+    }
+
   @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public Object deleteChallenge(@PathVariable String id) {
         return challengeService.deleteChallenge(id);

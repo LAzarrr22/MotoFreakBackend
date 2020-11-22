@@ -21,6 +21,8 @@ public class Challenge {
     private String name;
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private Date createdDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private Date updatedDate;
     private boolean general;
     private String company;
     private String model;

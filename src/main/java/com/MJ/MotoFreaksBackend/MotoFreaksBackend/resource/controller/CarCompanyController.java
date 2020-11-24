@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @RequestMapping("/cars")
 @CrossOrigin("*")
@@ -29,6 +31,8 @@ public class CarCompanyController {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return this.carsService.mergeCarModel(token, NewCarCompany,carParam);
     }
+
+
 
     @RequestMapping(path = "/add/company/{company}", method = RequestMethod.POST, produces = "application/json")
     public Object addCompany(HttpServletRequest req,@PathVariable String company) {
@@ -73,12 +77,12 @@ public class CarCompanyController {
 
     @RequestMapping(path = "/all/models/{company}", method = RequestMethod.GET, produces = "application/json")
     public Object getModels(@PathVariable String company) {
-        return carsService.getModels(company);
+        return ok(carsService.getModels(company));
     }
 
     @RequestMapping(path = "/all/generations/{company}/{model}", method = RequestMethod.GET, produces = "application/json")
     public Object getGenerations(@PathVariable String company, @PathVariable String model) {
-        return carsService.getGenerations(company, model);
+        return ok(carsService.getGenerations(company, model));
     }
 
 }

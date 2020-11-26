@@ -27,21 +27,21 @@ public class PostsController {
     }
 
     @RequestMapping(path = "/get/ALL", method = RequestMethod.GET, produces = "application/json")
-    public Object getAll(@RequestParam Map<String, String> carParam) {
-        return postsService.getPosts(null,carParam,null);
+    public Object getAll(@RequestParam Map<String, String> reqParams) {
+        return postsService.getPosts(null,reqParams,null);
     }
 
     @RequestMapping(path = "/get/{type}", method = RequestMethod.GET, produces = "application/json")
-    public Object getAllByType(@PathVariable PostType type, @RequestParam Map<String, String> carParam) {
-        return postsService.getPosts(type, carParam,null);
+    public Object getAllByType(@PathVariable PostType type, @RequestParam Map<String, String> reqParams) {
+        return postsService.getPosts(type, reqParams,null);
     }
     @RequestMapping(path = "/creator/id/{id}/get/ALL", method = RequestMethod.GET, produces = "application/json")
-    public Object getPostsById(@PathVariable String id, @RequestParam Map<String, String> carParam) {
-        return postsService.getPosts(null, carParam, id);
+    public Object getPostsById(@PathVariable String id, @RequestParam Map<String, String> reqParams) {
+        return postsService.getPosts(null, reqParams, id);
     }
     @RequestMapping(path = "/creator/id/{id}/get/{type}", method = RequestMethod.GET, produces = "application/json")
-    public Object getPostsByIAndType(@PathVariable String id, @PathVariable PostType type, @RequestParam Map<String, String> carParam) {
-        return postsService.getPosts(type, carParam, id);
+    public Object getPostsByIAndType(@PathVariable String id, @PathVariable PostType type, @RequestParam Map<String, String> reqParams) {
+        return postsService.getPosts(type, reqParams, id);
     }
 
     @RequestMapping(path = "/add", method = RequestMethod.POST, produces = "application/json")

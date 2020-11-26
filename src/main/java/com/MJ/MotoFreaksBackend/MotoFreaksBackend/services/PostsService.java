@@ -38,12 +38,12 @@ public class PostsService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public Object getPosts(PostType type, Map<String, String> carParam, String creator) {
+    public Object getPosts(PostType type, Map<String, String> reqParams, String creator) {
         List<Post> allPosts = postsRepository.findAll();
-        return findPostsFilters(carParam, allPosts, type,creator);
+        return findPostsFilters(reqParams, allPosts, type,creator);
     }
 
-    private Object findPostsFilters(Map<String, String> carParam, List<Post> returnPosts, PostType type, String creatorId) {
+    private Object findPostsFilters(Map<String, String> reqParams, List<Post> returnPosts, PostType type, String creatorId) {
         Query query = new Query();
         if (type != null) {
             query.addCriteria(Criteria.where("type").is(type));
@@ -51,9 +51,19 @@ public class PostsService {
         if (creatorId != null) {
             query.addCriteria(Criteria.where("creatorId").is(creatorId));
         }
-        if (!carParam.isEmpty()) {
-            carParam.keySet().forEach(key -> {
-                query.addCriteria(Criteria.where("car." + key).is(carParam.get(key)));
+        if (!reqParams.isEmpty() &&reqParams.get("state")!=null) {
+            if(!reqParams.get("state").equals("ALL")){
+                query.addCriteria(Criteria.where("state").is(reqParams.get("state")));
+            }
+            reqParams.remove("state");
+        }
+
+        if (!reqParams.isEmpty()) {
+            reqParams.keySet().forEach(key -> {
+                if(key.equals("company")|| key.equals("model")|| key.equals("generation")){
+                    query.addCriteria(Criteria.where("car." + key).is(reqParams.get(key)));
+                }
+
             });
             }
 

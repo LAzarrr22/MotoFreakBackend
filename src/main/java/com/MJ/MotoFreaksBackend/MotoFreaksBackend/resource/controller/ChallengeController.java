@@ -44,15 +44,15 @@ public class ChallengeController {
     }
 
     @RequestMapping(path = "/get/all", method = RequestMethod.GET, produces = "application/json")
-    public Object findAll(HttpServletRequest req) {
+    public Object findAll(HttpServletRequest req, @RequestParam Map<String, String> reqParams) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return challengeService.getAll(token);
+        return challengeService.getAll(token,false,reqParams);
     }
 
     @RequestMapping(path = "/get/all/general", method = RequestMethod.GET, produces = "application/json")
-    public Object findAllGeneral(HttpServletRequest req) {
+    public Object findAllGeneral(HttpServletRequest req, @RequestParam Map<String, String> reqParams) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return challengeService.getAllGeneral(token);
+        return challengeService.getAll(token,true, reqParams);
     }
 
     @RequestMapping(path = "/get/findBy/car", method = RequestMethod.GET, produces = "application/json")

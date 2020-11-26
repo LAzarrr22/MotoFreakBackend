@@ -119,16 +119,19 @@ public class ChallengeService {
         return false;
     }
 
-    public Object getAll(String token) {
+    public Object getAll(String token, Boolean isGeneral,Map<String, String> reqParams) {
+        List<Challenge> challengeList;
         String userId = userService.getUserByToken(token).getId();
-        List<Challenge> challengeList = challengeRepository.findAll();
+        if(isGeneral){
+            challengeList=getAllGeneral();
+        }else{
+            challengeList= challengeRepository.findAll();
+        }
         return sortByName(mappingToDtoChallenges(challengeList, userId), true);
     }
 
-    public Object getAllGeneral(String token) {
-        String userId = userService.getUserByToken(token).getId();
-        List<Challenge> challengeList = challengeRepository.findAll().stream().filter(challenge -> challenge.isGeneral()).collect(Collectors.toList());
-        return sortByName(mappingToDtoChallenges(challengeList, userId), true);
+    public List<Challenge> getAllGeneral() {
+         return challengeRepository.findAll().stream().filter(Challenge::isGeneral).collect(Collectors.toList());
     }
 
     private List<ChallengeDto> sortByName(List<ChallengeDto> mixList, boolean direction) {

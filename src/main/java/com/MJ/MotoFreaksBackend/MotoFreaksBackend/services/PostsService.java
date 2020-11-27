@@ -38,12 +38,8 @@ public class PostsService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public Object getPosts(PostType type, Map<String, String> reqParams, String creator) {
-        List<Post> allPosts = postsRepository.findAll();
-        return findPostsFilters(reqParams, allPosts, type,creator);
-    }
-
-    private Object findPostsFilters(Map<String, String> reqParams, List<Post> returnPosts, PostType type, String creatorId) {
+    public Object getPosts(PostType type, Map<String, String> reqParams, String creatorId) {
+        List<Post> returnPosts;
         Query query = new Query();
         if (type != null) {
             query.addCriteria(Criteria.where("type").is(type));
@@ -51,25 +47,23 @@ public class PostsService {
         if (creatorId != null) {
             query.addCriteria(Criteria.where("creatorId").is(creatorId));
         }
-        if (!reqParams.isEmpty() &&reqParams.get("state")!=null) {
-            if(!reqParams.get("state").equals("ALL")){
+        if (!reqParams.isEmpty() && reqParams.get("state") != null) {
+            if (!reqParams.get("state").equals("ALL")) {
                 query.addCriteria(Criteria.where("state").is(reqParams.get("state")));
             }
             reqParams.remove("state");
         }
-
         if (!reqParams.isEmpty()) {
             reqParams.keySet().forEach(key -> {
-                if(key.equals("company")|| key.equals("model")|| key.equals("generation")){
+                if (key.equals("company") || key.equals("model") || key.equals("generation")) {
                     query.addCriteria(Criteria.where("car." + key).is(reqParams.get(key)));
                 }
 
             });
-            }
-
+        }
         returnPosts = mongoTemplate.find(query, Post.class);
 
-        if(returnPosts.isEmpty()){
+        if (returnPosts.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found");
         }
         returnPosts.forEach(post -> post.setComments(post.getComments().stream().sorted(Comparator.comparing(Comment::getCreatedDate)).collect(Collectors.toList())));
@@ -116,20 +110,20 @@ public class PostsService {
         Map<Object, Object> model = new HashMap<>();
         User currentUser = userService.getUserByToken(token);
         Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
-        Comment newComment = new Comment(new ObjectId().toString(), comment.getContent(),currentUser.getId(),new Date(), new ArrayList<>(),new ArrayList<>());
-        if(Objects.isNull(post.getComments())){
+        Comment newComment = new Comment(new ObjectId().toString(), comment.getContent(), currentUser.getId(), new Date(), new ArrayList<>(), new ArrayList<>());
+        if (Objects.isNull(post.getComments())) {
             post.setComments(new ArrayList<>());
         }
         post.getComments().add(newComment);
         postsRepository.save(post);
-        model.put("message", "Add  " + comment + " to "+ postId + " post.");
+        model.put("message", "Add  " + comment + " to " + postId + " post.");
         return ok(model);
     }
 
     public Object deleteComment(String postId, String id) {
         Map<Object, Object> model = new HashMap<>();
         Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
-       post.getComments().removeIf(comment -> comment.getId().equals(id));
+        post.getComments().removeIf(comment -> comment.getId().equals(id));
         postsRepository.save(post);
         model.put("message", "Comment from " + postId + " post deleted.");
         return ok(model);
@@ -139,12 +133,12 @@ public class PostsService {
         Map<Object, Object> model = new HashMap<>();
         User currentUser = userService.getUserByToken(token);
         Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
-        post.getComments().forEach(comment->{
-            if(comment.getId().equals(id)){
-                if(!isUserAlreadyAtList(currentUser.getId(), comment.getApproved())){
+        post.getComments().forEach(comment -> {
+            if (comment.getId().equals(id)) {
+                if (!isUserAlreadyAtList(currentUser.getId(), comment.getApproved())) {
                     comment.getApproved().add(currentUser.getId());
                     model.put("message", "Approved comment " + id + " by " + currentUser.getId());
-                }else{
+                } else {
                     model.put("message", "User ia already evaluate comment " + id);
                 }
             }
@@ -157,21 +151,21 @@ public class PostsService {
         Map<Object, Object> model = new HashMap<>();
         User currentUser = userService.getUserByToken(token);
         Post post = postsRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
-            post.getComments().forEach(comment -> {
-                if (comment.getId().equals(id)) {
-                    if(!isUserAlreadyAtList(currentUser.getId(), comment.getRejected())){
-                        comment.getRejected().add(currentUser.getId());
-                        model.put("message", "Rejected comment " + id + " by " + currentUser.getId());
-                    }else{
-                        model.put("message", "User ia already evaluate comment " + id);
-                    }
+        post.getComments().forEach(comment -> {
+            if (comment.getId().equals(id)) {
+                if (!isUserAlreadyAtList(currentUser.getId(), comment.getRejected())) {
+                    comment.getRejected().add(currentUser.getId());
+                    model.put("message", "Rejected comment " + id + " by " + currentUser.getId());
+                } else {
+                    model.put("message", "User ia already evaluate comment " + id);
                 }
-            });
-            postsRepository.save(post);
+            }
+        });
+        postsRepository.save(post);
         return ok(model);
     }
 
-    private boolean isUserAlreadyAtList(String id, List<String> list){
-        return list.stream().anyMatch(item->item.equals(id));
+    private boolean isUserAlreadyAtList(String id, List<String> list) {
+        return list.stream().anyMatch(item -> item.equals(id));
     }
 }

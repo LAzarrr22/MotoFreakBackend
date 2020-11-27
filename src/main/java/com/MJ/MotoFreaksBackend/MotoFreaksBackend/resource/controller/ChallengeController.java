@@ -55,12 +55,6 @@ public class ChallengeController {
         return challengeService.getAll(token,true, reqParams);
     }
 
-    @RequestMapping(path = "/get/findBy/car", method = RequestMethod.GET, produces = "application/json")
-    public Object findByCar(HttpServletRequest req, @RequestParam Map<String, String> carParam) {
-        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return challengeService.findByCar(carParam, token);
-    }
-
     @RequestMapping(path = "/get/findBy/user/id/{id}", method = RequestMethod.GET, produces = "application/json")
     public Object findByUser(HttpServletRequest req, @PathVariable String id) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");

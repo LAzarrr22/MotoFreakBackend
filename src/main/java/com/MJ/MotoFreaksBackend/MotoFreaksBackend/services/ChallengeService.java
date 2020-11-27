@@ -1,6 +1,7 @@
 package com.MJ.MotoFreaksBackend.MotoFreaksBackend.services;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.Challenge;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.ChallengeStateForUser;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.QuestionAnswer;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.repository.ChallengeRepository;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewChallengeModel;
@@ -42,8 +43,7 @@ public class ChallengeService {
             newChallenge.setCreatedDate(new Date());
             newChallenge.setCreatorId(userService.getUserByToken(token).getId());
             newChallenge.setCompetitorIdList(new HashMap<>());
-
-            mapRequestToDB(challenge,newChallenge);
+            mapRequestToDB(challenge, newChallenge);
             model.put("message", "Challenge " + challenge.getName() + " was created.");
             log.info("Challenge " + challenge.getName() + " was created by " + newChallenge.getCreatorId());
         }
@@ -55,8 +55,8 @@ public class ChallengeService {
         Map<Object, Object> model = new HashMap<>();
         existsChallenge.setUpdatedDate(new Date());
         mapRequestToDB(challenge, existsChallenge);
-            model.put("message", "Challenge " + challenge.getName() + " was merged.");
-            log.info("Challenge " + challenge.getName() + " was merged.");
+        model.put("message", "Challenge " + challenge.getName() + " was merged.");
+        log.info("Challenge " + challenge.getName() + " was merged.");
 
         return ok(model);
     }
@@ -73,7 +73,7 @@ public class ChallengeService {
 
     public Object deleteChallenge(String id) {
         Map<Object, Object> model = new HashMap<>();
-       challengeRepository.deleteById(id);
+        challengeRepository.deleteById(id);
         model.put("message", "Challenge " + id + " was removed");
         return ok(model);
     }
@@ -82,23 +82,11 @@ public class ChallengeService {
         Map<Object, Object> model = new HashMap<>();
         String userId = userService.getUserByToken(token).getId();
         Challenge foundChallenge = findById(id);
-        foundChallenge.getCompetitorIdList().put(userId,obtainPoints);
+        foundChallenge.getCompetitorIdList().put(userId, obtainPoints);
         challengeRepository.save(foundChallenge);
         model.put("message", "Added competitor to " + foundChallenge.getName() + " challenge");
         log.info("Added competitor " + userId + " to " + foundChallenge.getName() + " challenge ");
         return ok(model);
-    }
-
-    public Object findByCar(Map<String, String> carParam, String token) {
-        String userId = userService.getUserByToken(token).getId();
-        Query query = new Query();
-        carParam.keySet().forEach(key -> {
-            query.addCriteria(Criteria.where(key).is(carParam.get(key)));
-        });
-        List<Challenge> challengeList = mongoTemplate.find(query, Challenge.class);
-        if (challengeList.isEmpty()) {
-         }
-        return sortByName(mappingToDtoChallenges(challengeList, userId), true);
     }
 
     public Object findByUser(String id, String token) {
@@ -119,19 +107,63 @@ public class ChallengeService {
         return false;
     }
 
-    public Object getAll(String token, Boolean isGeneral,Map<String, String> reqParams) {
-        List<Challenge> challengeList;
+    public Object getAll(String token, Boolean isGeneral, Map<String, String> reqParams) {
         String userId = userService.getUserByToken(token).getId();
-        if(isGeneral){
-            challengeList=getAllGeneral();
-        }else{
-            challengeList= challengeRepository.findAll();
+        return sortByName(mappingToDtoChallenges(filterParams(reqParams, isGeneral, userId), userId), true);
+    }
+
+    private List<Challenge> filterParams(Map<String, String> reqParams, boolean isGeneral, String userId) {
+        Query query = new Query();
+        List<Challenge> findChallenges;
+        String isFilledState = "";
+        if (!reqParams.isEmpty() && reqParams.get("state") != null) {
+            isFilledState = reqParams.get("state");
+            reqParams.remove("state");
         }
-        return sortByName(mappingToDtoChallenges(challengeList, userId), true);
+        if (isGeneral) {
+            findChallenges = getAllGeneral();
+        } else {
+            if (!reqParams.isEmpty()) {
+
+                reqParams.keySet().forEach(key -> {
+                    log.error(key);
+                    if (key.equals("company") || key.equals("model") || key.equals("generation")) {
+                        query.addCriteria(Criteria.where(key).is(reqParams.get(key)));
+                    }
+                });
+            }
+            findChallenges = mongoTemplate.find(query, Challenge.class);
+        }
+
+        if (isFilledState.equals(ChallengeStateForUser.FILLED.toString())) {
+            findChallenges = filterFilled(findChallenges, userId, true);
+        } else if (isFilledState.equals(ChallengeStateForUser.UNFILLED.toString())) {
+            findChallenges = filterFilled(findChallenges, userId, false);
+        }
+        if (findChallenges.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Posts not found");
+        }
+        return findChallenges;
     }
 
     public List<Challenge> getAllGeneral() {
-         return challengeRepository.findAll().stream().filter(Challenge::isGeneral).collect(Collectors.toList());
+        return challengeRepository.findAll().stream().filter(Challenge::isGeneral).collect(Collectors.toList());
+    }
+
+    private List<Challenge> filterFilled(List<Challenge> challenges, String userId, boolean isFilled) {
+        List<Challenge> findChallenges = new ArrayList<>();
+        challenges.forEach(challenge -> {
+            if (isFilled) {
+                if (isAlreadyFilled(userId, challenge)) {
+                    findChallenges.add(challenge);
+                }
+            } else {
+                if (!isAlreadyFilled(userId, challenge)) {
+                    findChallenges.add(challenge);
+                }
+            }
+        });
+        return findChallenges;
     }
 
     private List<ChallengeDto> sortByName(List<ChallengeDto> mixList, boolean direction) {
@@ -139,20 +171,19 @@ public class ChallengeService {
             return mixList.stream().sorted(Comparator.comparing(ChallengeDto::getName)).collect(Collectors.toList());
         }
         return mixList.stream().sorted(Comparator.comparing(ChallengeDto::getName).reversed()).collect(Collectors.toList());
-
     }
 
     private List<ChallengeDto> mappingToDtoChallenges(List<Challenge> challengeList, String userId) {
         List<ChallengeDto> challengeDtoList = new ArrayList<>();
         challengeList.forEach(challenge -> {
             challengeDtoList.add(new ChallengeDto(challenge.getId(), challenge.getName(), challenge.getCompany(), challenge.getModel()
-                    , challenge.getGeneration(), challenge.getCreatorId(), challenge.isGeneral(), isAlreadyFilled(userId, challenge),obtainPoints(userId,challenge), challenge.getQaList().size(), countAllPoints(challenge.getQaList())));
+                    , challenge.getGeneration(), challenge.getCreatorId(), challenge.isGeneral(), isAlreadyFilled(userId, challenge), obtainPoints(userId, challenge), challenge.getQaList().size(), countAllPoints(challenge.getQaList())));
         });
         return challengeDtoList;
     }
 
     private int obtainPoints(String userId, Challenge challenge) {
-        if(isAlreadyFilled(userId,challenge)){
+        if (isAlreadyFilled(userId, challenge)) {
             return challenge.getCompetitorIdList().get(userId);
         }
         return 0;
@@ -171,7 +202,6 @@ public class ChallengeService {
         String userFound = challenge.getCompetitorIdList().keySet().stream().filter(userId::equals).findAny().orElse("");
         return !userFound.isEmpty();
     }
-
 
 
 }

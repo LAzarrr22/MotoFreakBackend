@@ -14,5 +14,5 @@ import java.util.List;
 public class MessageData {
     private String id;
     private Date lastMessageDate;
-    private List<Message> messages;
+    private Message lastMessage;
 }

@@ -12,8 +12,6 @@ public class Review {
     private Integer points;
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private Date createdDate;
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private Date updatedDate;
-    private String creatorEmail;
+    private String creatorId;
 
 }

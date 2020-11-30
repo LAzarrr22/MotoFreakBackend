@@ -1,7 +1,7 @@
 package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.controller;
 
 
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.Recommendation;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.MotoPlaces;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.repository.RecomencdationRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/recommendation")
-public class RecommendationController implements Controller {
+public class MotoPlacesController implements Controller {
 
     private final RecomencdationRepository recomencdationRepository;
 
-    public RecommendationController(RecomencdationRepository recomencdationRepository) {
+    public MotoPlacesController(RecomencdationRepository recomencdationRepository) {
         this.recomencdationRepository = recomencdationRepository;
     }
 
@@ -23,18 +23,18 @@ public class RecommendationController implements Controller {
     }
 
     @Override
-    public List<Recommendation> getAll() {
+    public List<MotoPlaces> getAll() {
         return recomencdationRepository.findAll();
     }
 
 
     @PutMapping
-    public void insert(@RequestBody Recommendation recommendation) {
-        this.recomencdationRepository.insert(recommendation);
+    public void insert(@RequestBody MotoPlaces motoPlaces) {
+        this.recomencdationRepository.insert(motoPlaces);
     }
 
     @PostMapping
-    public void update(@RequestBody Recommendation recommendation) {
-        this.recomencdationRepository.save(recommendation);
+    public void update(@RequestBody MotoPlaces motoPlaces) {
+        this.recomencdationRepository.save(motoPlaces);
     }
 }

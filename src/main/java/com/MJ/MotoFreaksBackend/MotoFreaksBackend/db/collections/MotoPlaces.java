@@ -1,6 +1,7 @@
 package com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections;
 
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.TypeRecomendation;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.TypePlace;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Address;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Review;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -11,26 +12,21 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Document(collection = "Recommendations")
-public class Recommendation {
+@Document(collection = "MotoPlaces")
+public class MotoPlaces {
 
     @Id
     private String id;
-
-    private TypeRecomendation type;
+    private TypePlace type;
     private String name;
+    private Address address;
+    private String url;
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private Date createdDate;
-
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private Date updatedDate;
     private String creatorId;
-
     private List<Review> reviewList;
 
-    public Recommendation(TypeRecomendation type, String name, Date createdDate, Date updatedDate, String creatorId, List<Review> reviewList) {
-        this.type = type;
-        this.name = name;
-        this.createdDate = createdDate;
-        this.creatorId = creatorId;
-        this.reviewList = reviewList;
-    }
+
 }

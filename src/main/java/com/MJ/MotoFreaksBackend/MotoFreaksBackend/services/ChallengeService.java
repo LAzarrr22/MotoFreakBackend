@@ -102,9 +102,7 @@ public class ChallengeService {
 
     public boolean isExistByName(String name) {
         Optional<Challenge> optionalChallenge = challengeRepository.findByName(name);
-        if (optionalChallenge.isPresent())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Challenge with that name is already exists");
-        return false;
+        return optionalChallenge.isPresent();
     }
 
     public Object getAll(String token, Boolean isGeneral, Map<String, String> reqParams) {

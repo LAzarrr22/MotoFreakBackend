@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //USER
                 .antMatchers("/api/auth/check/validation", "/api/auth/roles", "/user/**",
                         "/challenge/get/**", "/challenge/id/**", "/cars/all/**",
-                        "/message/**", "/posts/**", "/sentence/get/all").hasAuthority(Role.USER.toString())
+                        "/message/**", "/posts/**", "/sentence/get/all", "/places/add").hasAuthority(Role.USER.toString())
                 //MODERATOR- DELETE
                 .antMatchers(HttpMethod.DELETE, "/cars/delete/**", "/sentence/modify/delete/**").hasAuthority(Role.MODERATOR.toString())
                 //MODERATOR- POST

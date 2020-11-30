@@ -20,13 +20,12 @@ public class MotoPlaces {
     private TypePlace type;
     private String name;
     private Address address;
-    private String url;
+    private String webPageUrl;
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private Date createdDate;
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private Date updatedDate;
     private String creatorId;
     private List<Review> reviewList;
-
 
 }

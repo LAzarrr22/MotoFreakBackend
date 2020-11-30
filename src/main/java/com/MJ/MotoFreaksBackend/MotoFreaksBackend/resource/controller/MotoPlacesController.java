@@ -1,40 +1,33 @@
 package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.controller;
 
 
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.MotoPlaces;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.repository.RecomencdationRepository;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewMotoPlace;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewPost;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts.AuthorizationHeader;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.MotoPlacesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/recommendation")
-public class MotoPlacesController implements Controller {
+@RequestMapping("/places")
+public class MotoPlacesController {
 
-    private final RecomencdationRepository recomencdationRepository;
 
-    public MotoPlacesController(RecomencdationRepository recomencdationRepository) {
-        this.recomencdationRepository = recomencdationRepository;
+    private final MotoPlacesService motoPlacesService;
+
+    @Autowired
+    public MotoPlacesController(MotoPlacesService motoPlacesService) {
+        this.motoPlacesService = motoPlacesService;
     }
 
-    @Override
-    public void delete(String id) {
-        this.recomencdationRepository.deleteById(id);
-    }
-
-    @Override
-    public List<MotoPlaces> getAll() {
-        return recomencdationRepository.findAll();
+    @RequestMapping(path = "/add", method = RequestMethod.POST, produces = "application/json")
+    public Object addPost(HttpServletRequest req, @RequestBody NewMotoPlace newMotoPlace) {
+        String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
+//        return motoPlacesService.addPlace(newMotoPlace, token);
+        return motoPlacesService.init(token);
     }
 
 
-    @PutMapping
-    public void insert(@RequestBody MotoPlaces motoPlaces) {
-        this.recomencdationRepository.insert(motoPlaces);
-    }
-
-    @PostMapping
-    public void update(@RequestBody MotoPlaces motoPlaces) {
-        this.recomencdationRepository.save(motoPlaces);
-    }
 }

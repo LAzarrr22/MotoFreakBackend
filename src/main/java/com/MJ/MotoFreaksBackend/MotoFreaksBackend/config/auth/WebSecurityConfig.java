@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/posts/**", "/user/**").hasAuthority(Role.USER.toString())
 
                 //MODERATOR- PUT
-                .antMatchers(HttpMethod.POST, "/cars/**", "/challenge").hasAuthority(Role.MODERATOR.toString())
+                .antMatchers(HttpMethod.PUT, "/cars/**", "/challenge/**").hasAuthority(Role.MODERATOR.toString())
                 //MODERATOR- DELETE
                 .antMatchers(HttpMethod.DELETE, "/cars/**", "/sentence/**").hasAuthority(Role.MODERATOR.toString())
                 //MODERATOR- POST

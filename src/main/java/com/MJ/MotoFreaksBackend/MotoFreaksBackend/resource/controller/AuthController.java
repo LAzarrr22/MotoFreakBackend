@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Slf4j
 @CrossOrigin("*")
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthUserService customUserAuthService;
@@ -25,28 +25,29 @@ public class AuthController {
         this.customUserAuthService = customUserAuthService;
     }
 
-    @PostMapping("/login")
+    @RequestMapping(path = "/login", method = RequestMethod.POST, produces = "application/json")
     public Object login(@RequestBody AuthBody data) {
         return customUserAuthService.loginUser(data);
     }
 
-    @PostMapping("/register")
+
+    @RequestMapping(path = "/register", method = RequestMethod.PUT, produces = "application/json")
     public Object register(@RequestBody RegisterBody user) {
         return customUserAuthService.registerUser(user, Role.USER);
     }
 
-    @GetMapping("/check/validation")
-    public Object checkValidation(HttpServletRequest req) {
+    @RequestMapping(path = "/validation", method = RequestMethod.GET, produces = "application/json")
+    public Object checkValidationUser(HttpServletRequest req) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return customUserAuthService.checkUser(token);
     }
 
-    @PostMapping("/set-role/moderator/{id}")
+    @RequestMapping(path = "/set/moderator/{id}", method = RequestMethod.POST, produces = "application/json")
     public Object addModeratorRole(@PathVariable String id) {
         return customUserAuthService.addRole(id, Role.MODERATOR);
     }
 
-    @PostMapping("/set-role/admin/{id}")
+    @RequestMapping(path = "/set/admin/{id}", method = RequestMethod.POST, produces = "application/json")
     public Object addAdminRole(@PathVariable String id) {
         return customUserAuthService.addRole(id, Role.ADMIN);
     }

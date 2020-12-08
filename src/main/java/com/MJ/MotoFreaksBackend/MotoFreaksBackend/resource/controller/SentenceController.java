@@ -20,17 +20,17 @@ public class SentenceController {
         this.sentenceService = sentenceService;
     }
 
-    @RequestMapping(path = "/get/all", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "", method = RequestMethod.GET, produces = "application/json")
     public Object getAllSentence(){
         return sentenceService.getAllSorted();
     }
 
-    @RequestMapping(path = "/modify/merge", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/merge", method = RequestMethod.POST, produces = "application/json")
     public Object mergeSentence(HttpServletRequest req, @RequestBody NewSentence newSentence){
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return sentenceService.merge(token,newSentence);
     }
-    @RequestMapping(path = "/modify/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public Object deleteSentence(@PathVariable String id){
         return sentenceService.delete(id);
     }

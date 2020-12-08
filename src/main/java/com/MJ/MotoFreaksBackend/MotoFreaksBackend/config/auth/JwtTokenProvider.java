@@ -1,8 +1,7 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.configs;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.config.auth;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.UserRoles;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.services.AuthUserService;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.services.UserDetailsServiceImpl;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

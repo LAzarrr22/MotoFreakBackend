@@ -1,4 +1,4 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.configs;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.config.auth;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

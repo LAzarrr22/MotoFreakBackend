@@ -1,4 +1,4 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.services;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.services;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.User;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.UserRoles;

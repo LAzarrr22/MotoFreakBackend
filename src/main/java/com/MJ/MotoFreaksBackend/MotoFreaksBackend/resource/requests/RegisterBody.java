@@ -1,4 +1,4 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.request;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests;
 
 import lombok.Data;
 

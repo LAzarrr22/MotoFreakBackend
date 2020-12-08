@@ -1,7 +1,7 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.configs;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.config.auth;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.Role;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.services.UserDetailsServiceImpl;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

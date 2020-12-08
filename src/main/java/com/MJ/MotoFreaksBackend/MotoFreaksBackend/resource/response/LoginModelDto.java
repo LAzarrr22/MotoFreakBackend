@@ -1,4 +1,4 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.response;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.response;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.Role;
 import lombok.AllArgsConstructor;

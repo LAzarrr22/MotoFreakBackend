@@ -4,7 +4,7 @@ package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.controller;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.PostType;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewMessage;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewPost;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts.AuthorizationHeader;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.consts.AuthorizationHeader;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.PostsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

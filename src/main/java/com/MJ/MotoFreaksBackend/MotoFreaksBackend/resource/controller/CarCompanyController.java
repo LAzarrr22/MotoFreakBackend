@@ -2,7 +2,7 @@ package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.controller;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.db.collections.CarCompany;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewCarCompany;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts.AuthorizationHeader;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.consts.AuthorizationHeader;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.CarsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

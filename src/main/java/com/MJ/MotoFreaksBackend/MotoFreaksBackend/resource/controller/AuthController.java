@@ -1,10 +1,10 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.controller;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.controller;
 
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.enums.Role;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts.AuthorizationHeader;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.request.AuthBody;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.request.RegisterBody;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.services.AuthUserService;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.consts.AuthorizationHeader;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.AuthBody;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.RegisterBody;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.AuthUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

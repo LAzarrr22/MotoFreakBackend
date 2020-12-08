@@ -4,7 +4,7 @@ import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Address;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.models.Contact;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.MergeUser;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewCar;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts.AuthorizationHeader;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.consts.AuthorizationHeader;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

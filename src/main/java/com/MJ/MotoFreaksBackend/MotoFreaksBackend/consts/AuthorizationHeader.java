@@ -1,4 +1,4 @@
-package com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.consts;
+package com.MJ.MotoFreaksBackend.MotoFreaksBackend.consts;
 
 public final class AuthorizationHeader {
     public final static String HEADER_NAME = "Authorization";

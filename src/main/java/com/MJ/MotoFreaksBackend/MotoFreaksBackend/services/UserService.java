@@ -11,7 +11,7 @@ import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.requests.NewCar;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.response.MyFriendDto;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.response.MyUserDto;
 import com.MJ.MotoFreaksBackend.MotoFreaksBackend.resource.response.UserDto;
-import com.MJ.MotoFreaksBackend.MotoFreaksBackend.security.configs.JwtTokenProvider;
+import com.MJ.MotoFreaksBackend.MotoFreaksBackend.config.auth.JwtTokenProvider;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;

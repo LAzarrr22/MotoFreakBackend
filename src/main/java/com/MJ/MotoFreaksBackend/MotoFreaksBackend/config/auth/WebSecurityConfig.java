@@ -38,17 +38,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().disable().csrf().disable().sessionManagement().and().authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/","/api/auth/login", "/api/auth/register", "/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs").permitAll()
-                //USER
-                .antMatchers("/api/auth/check/validation", "/api/auth/roles", "/user/**",
-                        "/challenge/get/**", "/challenge/id/**", "/cars/all/**",
-                        "/message/**", "/posts/**", "/sentence/get/all", "/places/add").hasAuthority(Role.USER.toString())
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/auth/login", "/auth/register", "/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs").permitAll()
+
+                //USER - GET
+                .antMatchers(HttpMethod.GET, "/auth/validation", "/auth/roles", "/cars/**",
+                        "/challenge/**", "/message/**", "/posts/**", "/sentence", "/user/**").hasAuthority(Role.USER.toString())
+                //USER- POST
+                .antMatchers(HttpMethod.POST, "/challenge/**/competitor/**", "/message/read/**",
+                        "/posts/**", "/user/**").hasAuthority(Role.USER.toString())
+                //USER- PUT
+                .antMatchers(HttpMethod.PUT, "/challenge/**/competitor/**", "/message/send/**",
+                        "/posts/**", "/user/**").hasAuthority(Role.USER.toString())
+                //USER- DELETE
+                .antMatchers(HttpMethod.DELETE, "/posts/**", "/user/**").hasAuthority(Role.USER.toString())
+
+                //MODERATOR- PUT
+                .antMatchers(HttpMethod.POST, "/cars/**", "/challenge").hasAuthority(Role.MODERATOR.toString())
                 //MODERATOR- DELETE
-                .antMatchers(HttpMethod.DELETE, "/cars/delete/**", "/sentence/modify/delete/**").hasAuthority(Role.MODERATOR.toString())
+                .antMatchers(HttpMethod.DELETE, "/cars/**", "/sentence/**").hasAuthority(Role.MODERATOR.toString())
                 //MODERATOR- POST
-                .antMatchers(HttpMethod.POST, "/api/auth/set-role/moderator/**",
-                        "/challenge/create/**","/challenge/merge/**", "/cars/add/**", "/sentence/modify/**").hasAuthority(Role.MODERATOR.toString())
+                .antMatchers(HttpMethod.POST, "/auth/set/moderator/**", "/cars/merge", "/challenge/**",
+                        "/sentence/merge").hasAuthority(Role.MODERATOR.toString())
+
                 //ADMIN
                 .antMatchers("/**").hasAuthority(Role.ADMIN.toString())
                 .anyRequest().authenticated()

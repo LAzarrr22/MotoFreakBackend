@@ -21,53 +21,53 @@ public class ChallengeController {
         this.challengeService = challengeService;
     }
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "", method = RequestMethod.PUT, produces = "application/json")
     public Object createChallenge(HttpServletRequest req, @RequestBody NewChallengeModel challenge) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return challengeService.createChallenge(token, challenge);
     }
 
-    @RequestMapping(path = "/merge/{id}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/{id}", method = RequestMethod.POST, produces = "application/json")
     public Object mergeChallenge(@PathVariable String id, @RequestBody NewChallengeModel challenge) {
         return challengeService.mergeChallenge(id, challenge);
     }
 
-  @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
+  @RequestMapping(path = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public Object deleteChallenge(@PathVariable String id) {
         return challengeService.deleteChallenge(id);
     }
 
-    @RequestMapping(path = "/id/{id}/add/competitor/points/{points}", method = RequestMethod.POST, produces = "application/json")
-    public Object addCompetitor(HttpServletRequest req, @PathVariable String id, @PathVariable int points) {
+    @RequestMapping(path = "/{challengeId}/competitor/points/{points}", method = RequestMethod.POST, produces = "application/json")
+    public Object addCompetitor(HttpServletRequest req, @PathVariable String challengeId, @PathVariable int points) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
-        return challengeService.addCompetitor(token, id, points);
+        return challengeService.addCompetitor(token, challengeId, points);
     }
 
-    @RequestMapping(path = "/get/all", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "", method = RequestMethod.GET, produces = "application/json")
     public Object findAll(HttpServletRequest req, @RequestParam Map<String, String> reqParams) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return challengeService.getAll(token,false,reqParams);
     }
 
-    @RequestMapping(path = "/get/all/general", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/general", method = RequestMethod.GET, produces = "application/json")
     public Object findAllGeneral(HttpServletRequest req, @RequestParam Map<String, String> reqParams) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return challengeService.getAll(token,true, reqParams);
     }
 
-    @RequestMapping(path = "/get/findBy/user/id/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/byUser/{id}", method = RequestMethod.GET, produces = "application/json")
     public Object findByUser(HttpServletRequest req, @PathVariable String id) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
 
         return challengeService.findByUser(id, token);
     }
 
-    @RequestMapping(path = "/get/questions/id/{id}", method = RequestMethod.GET, produces = "application/json")
-    public Object getQuestionsById(@PathVariable String id) {
-        return challengeService.getQuestions(id);
+    @RequestMapping(path = "/{challengeId}/questions", method = RequestMethod.GET, produces = "application/json")
+    public Object getQuestionsById(@PathVariable String challengeId) {
+        return challengeService.getQuestions(challengeId);
     }
 
-    @RequestMapping(path = "/get/check/exists/{name}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/exists/{name}", method = RequestMethod.GET, produces = "application/json")
     public Object isExists(@PathVariable String name) {
         return challengeService.isExistByName(name);
     }

@@ -203,17 +203,6 @@ public class UserService {
         return ok(model);
     }
 
-    public Object removePoints(String token, int points) {
-        Map<Object, Object> model = new HashMap<>();
-        User currentUser = getUserByToken(token);
-        currentUser.setPoints(currentUser.getPoints() - points);
-        currentUser.setUpdatedDate(new Date());
-        userRepository.save(currentUser);
-        model.put("message", points + " points removed from " + currentUser.getUserName() + " user.");
-        log.info(points + " points points removed from " + currentUser.getId() + " user.");
-        return ok(model);
-    }
-
     private boolean isYourFriend(User currentUser, String id) {
         if (currentUser.getId().equals(id)) {
             return true;

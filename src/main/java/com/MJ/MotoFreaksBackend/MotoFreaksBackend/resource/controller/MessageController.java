@@ -22,31 +22,31 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @RequestMapping(path = "/send/{receiverId}", method = RequestMethod.POST, produces = "application/json")
-    public Object addCar(HttpServletRequest req, @RequestBody NewMessage messageContent, @PathVariable String receiverId) {
+    @RequestMapping(path = "/send/{receiverId}", method = RequestMethod.PUT, produces = "application/json")
+    public Object sendMessage(HttpServletRequest req, @RequestBody NewMessage messageContent, @PathVariable String receiverId) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return messageService.sendMessage(token, receiverId, messageContent);
     }
 
-    @RequestMapping(path = "/read/all/user/{receiverId}", method = RequestMethod.POST, produces = "application/json")
-    public Object getReadLastById(HttpServletRequest req, @PathVariable String receiverId) {
+    @RequestMapping(path = "/read/{receiverId}", method = RequestMethod.POST, produces = "application/json")
+    public Object getReadAllMessagesWithUser(HttpServletRequest req, @PathVariable String receiverId) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return messageService.readMessage(token, receiverId);
     }
 
-    @RequestMapping(path = "/unread/count", method = RequestMethod.GET, produces = "application/json")
-    public Object getUnreadMessage(HttpServletRequest req) {
+    @RequestMapping(path = "/unread", method = RequestMethod.GET, produces = "application/json")
+    public Object getUnreadCount(HttpServletRequest req) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return messageService.getUnreadMessage(token);
     }
 
-    @RequestMapping(path = "/get/chats", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/chats", method = RequestMethod.GET, produces = "application/json")
     public Object getChats(HttpServletRequest req) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return messageService.getChatsInfo(token);
     }
 
-    @RequestMapping(path = "/get/{receiverId}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/{receiverId}", method = RequestMethod.GET, produces = "application/json")
     public Object getMessages(HttpServletRequest req, @PathVariable String receiverId) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return messageService.getMessages(token, receiverId);

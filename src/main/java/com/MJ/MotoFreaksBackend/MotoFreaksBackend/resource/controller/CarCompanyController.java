@@ -32,55 +32,53 @@ public class CarCompanyController {
         return this.carsService.mergeCarModel(token, NewCarCompany,carParam);
     }
 
-
-
-    @RequestMapping(path = "/add/company/{company}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/company/{company}", method = RequestMethod.PUT, produces = "application/json")
     public Object addCompany(HttpServletRequest req,@PathVariable String company) {
         String token = req.getHeader(AuthorizationHeader.HEADER_NAME).replace(AuthorizationHeader.TOKEN_PREFIX, "");
         return this.carsService.addCompany(token, company);
     }
 
-    @RequestMapping(path = "/add/model/{company}/{model}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/model/{company}/{model}", method = RequestMethod.PUT, produces = "application/json")
     public Object addModel(@PathVariable String company, @PathVariable String model) {
         return this.carsService.addModel(company, model);
     }
 
-    @RequestMapping(path = "/add/generation/{company}/{model}/{generation}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(path = "/generation/{company}/{model}/{generation}", method = RequestMethod.PUT, produces = "application/json")
     public Object addGeneration(@PathVariable String company, @PathVariable String model, @PathVariable String generation) {
         return this.carsService.addGeneration(company, model, generation);
     }
 
-    @RequestMapping(path = "/delete/company/{company}", method = RequestMethod.DELETE, produces = "application/json")
-    public Object delete(@PathVariable String company) {
+    @RequestMapping(path = "/company/{company}", method = RequestMethod.DELETE, produces = "application/json")
+    public Object deleteCompany(@PathVariable String company) {
         return this.carsService.deleteCompany(company);
     }
 
-    @RequestMapping(path = "/delete/model/{company}/{model}", method = RequestMethod.DELETE, produces = "application/json")
-    public Object delete(@PathVariable String company, @PathVariable String model) {
+    @RequestMapping(path = "/model/{company}/{model}", method = RequestMethod.DELETE, produces = "application/json")
+    public Object deleteModel(@PathVariable String company, @PathVariable String model) {
         return this.carsService.deleteModel(company, model);
     }
 
-    @RequestMapping(path = "/delete/generation/{company}/{model}/{generation}", method = RequestMethod.DELETE, produces = "application/json")
-    public Object delete(@PathVariable String company, @PathVariable String model, @PathVariable String generation) {
+    @RequestMapping(path = "/generation/{company}/{model}/{generation}", method = RequestMethod.DELETE, produces = "application/json")
+    public Object deleteGeneration(@PathVariable String company, @PathVariable String model, @PathVariable String generation) {
         return this.carsService.deleteGeneration(company, model, generation);
     }
 
-    @RequestMapping(path = "/all", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "", method = RequestMethod.GET, produces = "application/json")
     public List<CarCompany> getAll() {
         return carsService.findAll();
     }
 
-    @RequestMapping(path = "/all/companies", method = RequestMethod.GET, produces = "application/json")
-    public Object getAllCompanies() {
+    @RequestMapping(path = "/company", method = RequestMethod.GET, produces = "application/json")
+    public Object getCompanies() {
         return carsService.getAllCompanies();
     }
 
-    @RequestMapping(path = "/all/models/{company}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/model/{company}", method = RequestMethod.GET, produces = "application/json")
     public Object getModels(@PathVariable String company) {
         return ok(carsService.getModels(company));
     }
 
-    @RequestMapping(path = "/all/generations/{company}/{model}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(path = "/generation/{company}/{model}", method = RequestMethod.GET, produces = "application/json")
     public Object getGenerations(@PathVariable String company, @PathVariable String model) {
         return ok(carsService.getGenerations(company, model));
     }
